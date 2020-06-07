@@ -7,11 +7,7 @@ var db = require('./database');
 var dbfunc = require('./db-function');
 var http  = require('http')
 var bodyParser = require('body-parser');
-var UserRoute = require('../app/routes/user.route');
-var AuthenticRoute = require('../app/routes/authentic.route');
-var MenuRoute = require("../app/routes/menu.route")
-var UserRoute = require("../app/routes/user.route")
-var OrderRoute = require("../app/routes/order.route");
+var ExampleRoute = require('../../src/Controller/ExampleRoute');
 var errorCode = require('../common/error-code')
 var errorMessage = require('../common/error-methods')
 var checkToken = require('./secureRoute');
@@ -45,11 +41,21 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static("./images"));
 app.use(express.static("./images/avatar"));
-var router = express.Router({mergeParams: true});
-app.use('/api',router);
+//var router = express.Router({mergeParams: true});
+//app.use('/api',router);
 
+
+var secureApi = express.Router();
+app.use('/api'secureApi);
+secureApi.use(checkToken);
+
+ExampleRoute.init(secureApi);
+secureApi.use(checkToken);
 //set static folder
 app.use(express.static('public'));
+
+// UserRoute.init(secureApi);
+
 
 app.use(function (err, req, res, next) {
   console.error(err.stack);
